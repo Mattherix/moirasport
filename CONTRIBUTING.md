@@ -1,6 +1,6 @@
 # Contributing
 
-To contribute install Vscode.
+To contribute install VScode.
 
 - Open an issue to discuss
 - Create a draft PR linked to the issue
