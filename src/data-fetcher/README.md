@@ -1,6 +1,6 @@
 # Data fetcher
 
-Fetch the data from the [source api](https://docs.sportmonks.com/football/endpoints-and-entities/endpoints) and put it in the database.
+Fetch the data from the [source API](https://docs.sportmonks.com/football/endpoints-and-entities/endpoints) and put it in the database.
 
 The database has to stay in sync.
 
