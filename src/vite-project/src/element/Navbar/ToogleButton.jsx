@@ -2,6 +2,51 @@ import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import React, { useState } from "react";
+
+
+
+function ColorInverse() {
+  const [color, setColor] = useState('#242424');
+
+  const handleInverseColor = () => {
+    setColor((prevColor) => {
+      const invertedColor = invertColor(prevColor);
+      return invertedColor;
+    });
+  };
+
+  const invertColor = (hex) => {
+    if (hex.indexOf('#') === 0) {
+      hex = hex.slice(1);
+    }
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    hex = hex.split('');
+    for (let i = 0; i < 6; i++) {
+      hex[i] = (15 - parseInt(hex[i], 16)).toString(16);
+    }
+    return '#' + hex.join('');
+  };
+
+  return (
+    <div style={{ backgroundColor: color }}>
+      <FormGroup>
+        <FormControlLabel
+          onClick={handleInverseColor}
+          control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked variant="contained" />}
+          />
+      </FormGroup>
+      
+    </div>
+  );
+}
+
+
+
+
+export default ColorInverse;
 
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -51,21 +96,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-function handleColorInvert() {
-    console.log("handleColorInvert");
-};
 
 
 
-
-export default function CustomizedSwitches() {
-  return (
-    <FormGroup>
-      <FormControlLabel
-        onClick={handleColorInvert}
-        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
-        label="MUI switch"
-      />
-    </FormGroup>
-  );
-}
+  
