@@ -13,7 +13,11 @@ CREATE TABLE IF NOT EXISTS Teams (
     image_path varchar(255) NOT NULL,
     founded year(4) NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+
+    -- First sets of rules invented in 1845
+    -- https://en.wikipedia.org/wiki/History_of_association_football#The_Football_Association
+    CHECK (founded >= 1845)
 );
 
 CREATE TABLE IF NOT EXISTS Coachs (
@@ -28,7 +32,10 @@ CREATE TABLE IF NOT EXISTS Coachs (
     team_id int NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (team_id) REFERENCES Teams(id)
+    FOREIGN KEY (team_id) REFERENCES Teams(id),
+
+    CHECK (height > 100 AND height < 220),
+    CHECK (weight > 30 AND weight < 120)
 );
 
 CREATE TABLE IF NOT EXISTS Players (
@@ -45,7 +52,10 @@ CREATE TABLE IF NOT EXISTS Players (
     date_of_birth date NOT NULL,
     gender set('male', 'female') NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+
+    CHECK (height > 100 AND height < 220),
+    CHECK (weight > 30 AND weight < 120)
 );
 
 CREATE TABLE IF NOT EXISTS Leagues (
@@ -70,7 +80,9 @@ CREATE TABLE IF NOT EXISTS Seasons (
     league_id int NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (league_id) REFERENCES Leagues(id)
+    FOREIGN KEY (league_id) REFERENCES Leagues(id),
+
+    CHECK (starting_at <= ending_at)
 );
 
 CREATE TABLE IF NOT EXISTS Stages (
@@ -84,7 +96,9 @@ CREATE TABLE IF NOT EXISTS Stages (
     season_id int NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (season_id) REFERENCES Seasons(id)
+    FOREIGN KEY (season_id) REFERENCES Seasons(id),
+
+    CHECK (starting_at <= ending_at)
 );
 
 CREATE TABLE IF NOT EXISTS Rounds (
@@ -96,7 +110,9 @@ CREATE TABLE IF NOT EXISTS Rounds (
     stage_id int NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (stage_id) REFERENCES Stages(id)
+    FOREIGN KEY (stage_id) REFERENCES Stages(id),
+
+    CHECK (starting_at <= ending_at)
 );
 
 CREATE TABLE IF NOT EXISTS Referees (
@@ -109,7 +125,10 @@ CREATE TABLE IF NOT EXISTS Referees (
     date_of_birth date NOT NULL,
     gender set('male', 'female') NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+
+    CHECK (height > 100 AND height < 220),
+    CHECK (weight > 30 AND weight < 120)
 );
 
 CREATE TABLE IF NOT EXISTS Fixtures (
@@ -147,5 +166,7 @@ CREATE TABLE IF NOT EXISTS playing_in (
     ending_at date,
 
     FOREIGN KEY (player_id) REFERENCES Players(id),
-    FOREIGN KEY (team_id) REFERENCES Teams(id)
+    FOREIGN KEY (team_id) REFERENCES Teams(id),
+
+    CHECK (starting_at <= IFNULL(ending_at, starting_at))
 );
