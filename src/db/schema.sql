@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Teams (
     short_code varchar(5),
     type set('domestic') NOT NULL,
     image_path varchar(255) NOT NULL,
-    founded int NOT NULL,
+    founded year(4) NOT NULL,
 
     PRIMARY KEY (id)
 );
