@@ -96,7 +96,28 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+<<<<<<< HEAD
 
 
 
   
+=======
+function handleColorInvert() {
+    console.log("handleColorInvert");
+};
+
+
+
+
+export default function CustomizedSwitches() {
+  return (
+    <FormGroup>
+      <FormControlLabel
+        onClick={handleColorInvert}
+        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+        label="MUI switch"
+      />
+    </FormGroup>
+  );
+}
+>>>>>>> 39c5a665abe9c1fff64cca42724996d43929eef9
