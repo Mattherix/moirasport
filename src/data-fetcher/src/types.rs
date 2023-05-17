@@ -18,7 +18,7 @@ pub struct Teams {
     #[serde(rename = "type")] 
     pub teams_type: TeamsType,
     pub image_path: String,
-    pub founded: u32,
+    pub founded: Option<u32>
 }
 
 impl SportMonks for Teams {}
@@ -26,11 +26,27 @@ impl SportMonks for Teams {}
 
 #[derive(Deserialize, Debug)]
 pub struct Response<T> {
-    pub data: T
+    pub data: T,
+    pub pagination: Pagination,
+    pub rate_limit: RateLimit
     /*
-    pagination: String,
     subscription: String,
-    rate_limit: String,
     timezone: String
     */
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Pagination {
+    pub count: u32,
+    pub per_page: u32,
+    pub current_page: u32,
+    pub next_page: Option<String>,
+    pub has_more: bool
+}
+
+#[derive(Deserialize, Debug)]
+pub struct RateLimit {
+    pub resets_in_seconds: u32,
+    pub remaining: u32,
+    pub requested_entity: String
 }
