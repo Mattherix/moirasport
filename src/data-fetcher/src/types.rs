@@ -41,7 +41,9 @@ pub struct RateLimit {
 #[derive(Debug, Deserialize, Type)]
 #[sqlx(type_name = "gender")]
 #[sqlx(rename_all = "lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum Gender {
     Male,
-    Female
+    Female,
+    Neutral
 }
