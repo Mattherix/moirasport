@@ -90,6 +90,32 @@ impl SportMonks for Players {
         self,
         conn: &mut PoolConnection<sqlx::MySql>,
     ) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error> {
-        unimplemented!()
+        let query = "INSERT IGNORE INTO Players \
+        (id, role, position, firstname, lastname, image_path, height, weight, date_of_birth, gender) \
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        let mut role = None;
+        if let Some(role_response) = self.position {
+            role = Some(role_response.code);
+        }
+
+        let mut position = None;
+        if let Some(detailed_position_response) = self.detailedposition {
+            position = Some(detailed_position_response.code);
+        }
+
+        sqlx::query(query)
+            .bind(self.id)
+            .bind(role)
+            .bind(position)
+            .bind(self.firstname)
+            .bind(self.lastname)
+            .bind(self.image_path)
+            .bind(self.height)
+            .bind(self.weight)
+            .bind(self.date_of_birth)
+            .bind(self.gender)
+            .execute(conn)
+            .await
     }
 }
