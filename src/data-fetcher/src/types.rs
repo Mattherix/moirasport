@@ -1,14 +1,14 @@
-use std::fmt::Debug;
 use async_trait::async_trait;
+use std::fmt::Debug;
 
 use serde::Deserialize;
-use sqlx::{MySql, Type, pool::PoolConnection};
+use sqlx::{pool::PoolConnection, MySql, Type};
 
 #[async_trait]
 pub trait SportMonks: for<'a> Deserialize<'a> + Debug {
     async fn insert(
         self,
-        conn: &mut PoolConnection<sqlx::MySql>
+        conn: &mut PoolConnection<sqlx::MySql>,
     ) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error>;
 }
 
@@ -35,7 +35,7 @@ pub struct Teams {
 impl SportMonks for Teams {
     async fn insert(
         self,
-        conn: &mut PoolConnection<sqlx::MySql>
+        conn: &mut PoolConnection<sqlx::MySql>,
     ) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error> {
         let query = "INSERT IGNORE INTO Teams (id, name, type, short_code, image_path, founded) VALUES (?, ?, ?, ?, ?, ?)";
         sqlx::query(query)
