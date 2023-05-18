@@ -45,5 +45,15 @@ pub struct RateLimit {
 pub enum Gender {
     Male,
     Female,
-    Neutral,
+    Neutral
+}
+
+#[derive(Debug, Deserialize, Type, Clone)]
+#[sqlx(type_name = "state")]
+#[sqlx(rename_all = "lowercase")]
+#[serde(rename_all = "lowercase")]
+pub enum State {
+    Pending,
+    Current,
+    Finished
 }

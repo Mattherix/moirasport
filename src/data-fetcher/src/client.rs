@@ -29,7 +29,7 @@ impl ApiClient {
         self,
         url: &str,
     ) -> Result<types::Response<Vec<T>>, reqwest::Error> {
-        println!("{}", url);
+        dbg!(url);
         self.client
             .get(url)
             .send()
