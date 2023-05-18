@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use std::fmt::Debug;
 
 use serde::Deserialize;
-use sqlx::{pool::PoolConnection, MySql, Type};
+use sqlx::{pool::PoolConnection, MySql};
 
 #[async_trait]
 pub trait SportMonks: for<'a> Deserialize<'a> + Debug {

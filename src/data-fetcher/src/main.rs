@@ -6,8 +6,8 @@ use std::env;
 use std::error::Error;
 
 mod client;
-mod types;
 mod models;
+mod types;
 
 fn get_env(variable: &str) -> String {
     env::var(variable).expect(&format!(

@@ -1,9 +1,8 @@
 use async_trait::async_trait;
 use serde::Deserialize;
-use sqlx::{Type, pool::PoolConnection, MySql};
+use sqlx::{pool::PoolConnection, MySql, Type};
 
 use crate::types::SportMonks;
-
 
 #[derive(Debug, Deserialize, Type)]
 #[sqlx(type_name = "color")]
