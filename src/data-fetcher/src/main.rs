@@ -4,10 +4,10 @@ use sqlx::pool::PoolConnection;
 use sqlx::MySqlPool;
 use std::env;
 use std::error::Error;
-use types::Teams;
 
 mod client;
 mod types;
+mod models;
 
 fn get_env(variable: &str) -> String {
     env::var(variable).expect(&format!(
@@ -47,7 +47,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let conn = &mut pool.acquire().await?;
 
-    fetch_and_insert_all::<Teams>(conn, &token).await?;
+    fetch_and_insert_all::<models::Teams>(conn, &token).await?;
 
     Ok(())
 }

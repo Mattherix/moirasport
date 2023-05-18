@@ -12,44 +12,6 @@ pub trait SportMonks: for<'a> Deserialize<'a> + Debug {
     ) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error>;
 }
 
-#[derive(Debug, Deserialize, Type)]
-#[sqlx(type_name = "color")]
-#[sqlx(rename_all = "lowercase")]
-pub enum TeamsType {
-    #[serde(rename = "domestic")]
-    Domestic,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct Teams {
-    pub id: u32,
-    pub name: String,
-    pub short_code: Option<String>,
-    #[serde(rename = "type")]
-    pub teams_type: TeamsType,
-    pub image_path: String,
-    pub founded: Option<u32>,
-}
-
-#[async_trait]
-impl SportMonks for Teams {
-    async fn insert(
-        self,
-        conn: &mut PoolConnection<sqlx::MySql>,
-    ) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error> {
-        let query = "INSERT IGNORE INTO Teams (id, name, type, short_code, image_path, founded) VALUES (?, ?, ?, ?, ?, ?)";
-        sqlx::query(query)
-            .bind(self.id)
-            .bind(self.name)
-            .bind(self.teams_type)
-            .bind(self.short_code)
-            .bind(self.image_path)
-            .bind(self.founded)
-            .execute(conn)
-            .await
-    }
-}
-
 #[derive(Deserialize, Debug, Clone)]
 pub struct Response<T> {
     pub data: T,
