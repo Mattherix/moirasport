@@ -2,7 +2,9 @@ use async_recursion::async_recursion;
 use dotenvy::dotenv;
 use reqwest::header;
 use reqwest::Client;
+use sqlx::pool::PoolConnection;
 use sqlx::{MySqlPool};
+use types::Teams;
 use std::env;
 use std::error::Error;
 use std::{thread, time::Duration};
@@ -82,6 +84,19 @@ fn get_env(variable: &str) -> String {
     ))
 }
 
+async fn insert_all<T: types::SportMonks>(conn: &mut PoolConnection<sqlx::MySql>, token: &str) -> Result<(), Box<dyn Error>> {
+    let sport = SportMonks::new(token).await?;
+    let url = "https://api.sportmonks.com/v3/football/teams";
+    let data: Vec<T> = sport.all(url).await?;
+
+    // TODO: find a way to do it concurrently
+    for team in data {
+        team.insert(conn).await?;
+    }
+    
+    Ok(())
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     dotenv()?;
@@ -95,14 +110,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     ))
     .await?;
 
-    let sport = SportMonks::new(token.as_str()).await?;
-    let url = "https://api.sportmonks.com/v3/football/teams";
-    let data: Vec<types::Teams> = sport.all(url).await?;
+    let conn = &mut pool.acquire().await?;
 
-    // TODO: find a way to do it concurrently
-    for team in data {
-        team.insert(&pool).await?;
-    }
+    insert_all::<Teams>(conn, &token).await?;
 
     Ok(())
 }
