@@ -5,7 +5,7 @@ use sqlx::{pool::PoolConnection, MySql, Type};
 use crate::types::SportMonks;
 
 #[derive(Debug, Deserialize, Type)]
-#[sqlx(type_name = "color")]
+#[sqlx(type_name = "teams_type")]
 #[sqlx(rename_all = "lowercase")]
 pub enum TeamsType {
     #[serde(rename = "domestic")]
