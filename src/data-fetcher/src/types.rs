@@ -1,13 +1,16 @@
 use std::fmt::Debug;
 
 use serde::Deserialize;
+use sqlx::{Type};
 
 pub trait SportMonks: for<'a> Deserialize<'a> + Debug {}
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Type)]
+#[sqlx(type_name = "color")]
+#[sqlx(rename_all = "lowercase")]
 pub enum TeamsType {
     #[serde(rename = "domestic")]
-    Domestic,
+    Domestic
 }
 
 #[derive(Deserialize, Debug)]
@@ -23,7 +26,7 @@ pub struct Teams {
 
 impl SportMonks for Teams {}
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Response<T> {
     pub data: T,
     pub pagination: Pagination,
@@ -33,7 +36,7 @@ pub struct Response<T> {
                                */
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Pagination {
     pub count: u32,
     pub per_page: u32,
@@ -42,7 +45,7 @@ pub struct Pagination {
     pub has_more: bool,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct RateLimit {
     pub resets_in_seconds: u32,
     pub remaining: u32,

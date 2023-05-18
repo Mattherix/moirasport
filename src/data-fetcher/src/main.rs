@@ -1,10 +1,11 @@
 use dotenvy::dotenv;
-use reqwest::blocking::Client;
+use reqwest::Client;
 use reqwest::{header};
 use sqlx::{MySqlPool, Row};
 use std::env;
 use std::error::Error;
 use std::{thread, time::Duration};
+use async_recursion::async_recursion;
 
 use crate::types::Teams;
 mod types;
@@ -15,7 +16,7 @@ pub struct SportMonks {
 }
 
 impl SportMonks {
-    pub fn new(token: &str) -> Result<Self, reqwest::Error> {
+    pub async fn new(token: &str) -> Result<Self, reqwest::Error> {
         let mut headers = header::HeaderMap::new();
         headers.insert(
             header::AUTHORIZATION,
@@ -29,21 +30,24 @@ impl SportMonks {
         Ok(SportMonks { client })
     }
 
-    fn get_response<T: types::SportMonks>(self, url: &str) -> Result<types::Response<Vec<T>>, reqwest::Error> {
+    async fn get_response<T: types::SportMonks>(self, url: &str) -> Result<types::Response<Vec<T>>, reqwest::Error> {
         self.client
             .get(url)
-            .send()?
+            .send()
+            .await?
             .json::<types::Response<Vec<T>>>()
+            .await
     }
 
-    pub fn get<T: types::SportMonks>(self, url: &str) -> Result<Vec<T>, reqwest::Error> {
-        Ok(self.get_response(url)?.data)
+    pub async fn get<T: types::SportMonks>(self, url: &str) -> Result<Vec<T>, reqwest::Error> {
+        Ok(self.get_response(url).await?.data)
     }
 
-    pub fn all<T: types::SportMonks>(self, url: &str) -> Result<Vec<T>, reqwest::Error> {
+    #[async_recursion(?Send)]
+    pub async fn all<T: types::SportMonks>(self, url: &str) -> Result<Vec<T>, reqwest::Error> {
         let mut items: Vec<T> = vec![];
 
-        let response = self.clone().get_response(url)?;
+        let response = self.clone().get_response(url).await?;
         items.extend(response.data);
 
         if response.pagination.has_more {
@@ -59,7 +63,7 @@ impl SportMonks {
 
             items.extend(self.all(&response.pagination.next_page.expect(
                 "Can't get next_page while there ismore page (has_more arg in pagination)",
-            ))?);
+            )).await?);
         }
 
         Ok(items)
@@ -91,11 +95,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let sum: i32 = res.get("sum");
     println!("{:#?}", sum);
-    return Ok(());
 
-    let sport = SportMonks::new(token.as_str())?;
+    let sport = SportMonks::new(token.as_str()).await?;
     let url = "https://api.sportmonks.com/v3/football/teams";
-    let data: Vec<types::Teams> = sport.all(url)?;
+    let data: Vec<types::Teams> = sport.all(url).await?;
 
     println!("{:#?}", data);
 
