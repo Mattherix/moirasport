@@ -19,9 +19,9 @@ fn get_env(variable: &str) -> String {
 async fn fetch_and_insert_all<T: types::SportMonks>(
     conn: &mut PoolConnection<sqlx::MySql>,
     token: &str,
+    url: &str
 ) -> Result<(), Box<dyn Error>> {
     let sport = ApiClient::new(token).await?;
-    let url = "https://api.sportmonks.com/v3/football/teams";
     let data: Vec<T> = sport.all(url).await?;
 
     // TODO: find a way to do it concurrently
@@ -46,8 +46,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     .await?;
 
     let conn = &mut pool.acquire().await?;
-
-    fetch_and_insert_all::<models::Teams>(conn, &token).await?;
+    let url = "https://api.sportmonks.com/v3/football/teams";
+    fetch_and_insert_all::<models::Teams>(conn, &token, &url).await?;
 
     Ok(())
 }
