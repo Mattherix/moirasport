@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
 use serde::Deserialize;
-use sqlx::{Type, MySql};
+use sqlx::{MySql, Type};
 
 pub trait SportMonks: for<'a> Deserialize<'a> + Debug {}
 
@@ -10,7 +10,7 @@ pub trait SportMonks: for<'a> Deserialize<'a> + Debug {}
 #[sqlx(rename_all = "lowercase")]
 pub enum TeamsType {
     #[serde(rename = "domestic")]
-    Domestic
+    Domestic,
 }
 
 #[derive(Deserialize, Debug)]
@@ -26,7 +26,10 @@ pub struct Teams {
 impl SportMonks for Teams {}
 
 impl Teams {
-    pub async fn insert(self, conn: &sqlx::Pool<MySql>) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error> {
+    pub async fn insert(
+        self,
+        conn: &sqlx::Pool<MySql>,
+    ) -> Result<<MySql as sqlx::Database>::QueryResult, sqlx::Error> {
         let query = "INSERT IGNORE INTO Teams (id, name, type, short_code, image_path, founded) VALUES (?, ?, ?, ?, ?, ?)";
         sqlx::query(query)
             .bind(self.id)
