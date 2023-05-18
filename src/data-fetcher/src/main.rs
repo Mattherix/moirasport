@@ -100,7 +100,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let url = "https://api.sportmonks.com/v3/football/teams";
     let data: Vec<types::Teams> = sport.all(url).await?;
 
-    println!("{:#?}", data);
-
+    // TODO: find a way to do it concurrently
+    for team in data {
+        team.insert(&pool).await?;
+    }
+    
     Ok(())
 }
