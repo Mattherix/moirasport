@@ -25,8 +25,8 @@ async fn fetch_and_insert_all<T: types::SportMonks>(
     let data: Vec<T> = sport.all(url).await?;
 
     // TODO: find a way to do it concurrently
-    for team in data {
-        team.insert(conn).await?;
+    for entity in data {
+        entity.insert(conn).await?;
     }
 
     Ok(())
@@ -47,7 +47,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/teams";
-    fetch_and_insert_all::<models::Teams>(conn, &token, &url).await?;
+    fetch_and_insert_all::<models::Teams>(conn, &token, &url).await;
+
+    let conn = &mut pool.acquire().await?;
+    let url = "https://api.sportmonks.com/v3/football/coaches?include=teams";
+    fetch_and_insert_all::<models::Coachs>(conn, &token, &url).await?;
 
     Ok(())
 }

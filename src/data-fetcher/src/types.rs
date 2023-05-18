@@ -38,7 +38,7 @@ pub struct RateLimit {
     pub requested_entity: String,
 }
 
-#[derive(Debug, Deserialize, Type)]
+#[derive(Debug, Deserialize, Type, Clone)]
 #[sqlx(type_name = "gender")]
 #[sqlx(rename_all = "lowercase")]
 #[serde(rename_all = "lowercase")]
