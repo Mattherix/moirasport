@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use serde::Deserialize;
 use sqlx::{pool::PoolConnection, MySql, Type};
 
-use crate::types::{SportMonks, Gender};
+use crate::types::{Gender, SportMonks};
 
 #[derive(Debug, Deserialize, Type)]
 #[sqlx(type_name = "teams_type")]

@@ -1,11 +1,9 @@
 use async_trait::async_trait;
-use serde::Deserialize;
 use chrono;
+use serde::Deserialize;
 use sqlx::{pool::PoolConnection, MySql};
 
 use crate::types::{Gender, SportMonks};
-
-use super::teams;
 
 // https://api.sportmonks.com/v3/football/coaches?api_token={{api_token}}&include=teams;
 
@@ -18,7 +16,7 @@ pub struct TeamOfTheCoach {
     active: bool,
     start: Option<chrono::NaiveDate>,
     end: Option<chrono::NaiveDate>,
-    temporary: bool
+    temporary: bool,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -32,7 +30,7 @@ pub struct Coachs {
     pub date_of_birth: Option<chrono::NaiveDate>,
     pub gender: Gender,
     // Must use teams include
-    pub teams: Vec<TeamOfTheCoach>
+    pub teams: Vec<TeamOfTheCoach>,
 }
 
 #[async_trait]
@@ -54,7 +52,6 @@ impl SportMonks for Coachs {
                             recent_team = team;
                         }
                     }
-                    
                 }
             }
             most_recent_team = Some(recent_team);
@@ -64,7 +61,6 @@ impl SportMonks for Coachs {
         if let Some(team) = most_recent_team {
             team_id = Some(team.team_id);
         }
-        
 
         let query = "INSERT IGNORE INTO Coachs \
         (id, firstname, lastname, image_path, height, weight, date_of_birth, gender, team_id) \

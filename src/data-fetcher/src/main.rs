@@ -19,7 +19,7 @@ fn get_env(variable: &str) -> String {
 async fn fetch_and_insert_all<T: types::SportMonks>(
     conn: &mut PoolConnection<sqlx::MySql>,
     token: &str,
-    url: &str
+    url: &str,
 ) -> Result<(), Box<dyn Error>> {
     let sport = ApiClient::new(token).await?;
     let data: Vec<T> = sport.all(url).await?;
@@ -47,7 +47,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/teams";
-    fetch_and_insert_all::<models::Teams>(conn, &token, &url).await;
+    fetch_and_insert_all::<models::Teams>(conn, &token, &url).await?;
 
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/coaches?include=teams";

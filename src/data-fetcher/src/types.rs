@@ -45,5 +45,5 @@ pub struct RateLimit {
 pub enum Gender {
     Male,
     Female,
-    Neutral
+    Neutral,
 }

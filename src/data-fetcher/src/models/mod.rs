@@ -1,5 +1,5 @@
-mod teams;
 mod coaches;
+mod teams;
 
 pub use teams::{Teams, TeamsType};
 
