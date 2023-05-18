@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use serde::Deserialize;
 use sqlx::{pool::PoolConnection, MySql, Type};
 
-use crate::types::SportMonks;
+use crate::types::{SportMonks, Gender};
 
 #[derive(Debug, Deserialize, Type)]
 #[sqlx(type_name = "teams_type")]
@@ -17,6 +17,7 @@ pub struct Teams {
     pub id: u32,
     pub name: String,
     pub short_code: Option<String>,
+    pub gender: Gender,
     #[serde(rename = "type")]
     pub teams_type: TeamsType,
     pub image_path: String,

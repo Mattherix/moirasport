@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use std::fmt::Debug;
 
 use serde::Deserialize;
-use sqlx::{pool::PoolConnection, MySql};
+use sqlx::{pool::PoolConnection, MySql, Type};
 
 #[async_trait]
 pub trait SportMonks: for<'a> Deserialize<'a> + Debug {
@@ -36,4 +36,12 @@ pub struct RateLimit {
     pub resets_in_seconds: u32,
     pub remaining: u32,
     pub requested_entity: String,
+}
+
+#[derive(Debug, Deserialize, Type)]
+#[sqlx(type_name = "gender")]
+#[sqlx(rename_all = "lowercase")]
+pub enum Gender {
+    Male,
+    Female
 }
