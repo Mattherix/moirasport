@@ -19,7 +19,7 @@ pub enum TieBreakerRule {
     #[sqlx(rename = "head-to-head-ranking-prev-stage")]
     HeadToHeadRankingPrevStage = 1678,
     #[sqlx(rename = "none")]
-    Nothing = 573
+    None = 573
 }
 
 #[derive(Deserialize, Debug)]
@@ -62,10 +62,8 @@ impl SportMonks for Seasons {
             171  => TieBreakerRule::GoalDifference,
             1526 => TieBreakerRule::GoalDifferenceGoalsScored,
             1678 => TieBreakerRule::HeadToHeadRankingPrevStage,
-            _    => TieBreakerRule::Nothing
+            _    => TieBreakerRule::None
         };
-
-        dbg!(&tie_breaker_rule);
 
         sqlx::query(query)
             .bind(self.id)
