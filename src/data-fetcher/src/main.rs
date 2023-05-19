@@ -69,6 +69,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/stages";
     fetch_and_insert_all::<models::Stage>(conn, &token, &url).await?;
+    
+    let conn = &mut pool.acquire().await?;
+    let url = "https://api.sportmonks.com/v3/football/rounds";
+    fetch_and_insert_all::<models::Rounds>(conn, &token, &url).await?;
 
     Ok(())
 }
