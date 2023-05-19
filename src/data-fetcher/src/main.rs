@@ -56,7 +56,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/players?include=position;detailedPosition";
     fetch_and_insert_all::<models::Players>(conn, &token, &url).await?;
-    */
 
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/leagues";
@@ -73,6 +72,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/rounds";
     fetch_and_insert_all::<models::Rounds>(conn, &token, &url).await?;
+    */
+
+    let conn = &mut pool.acquire().await?;
+    let url = "https://api.sportmonks.com/v3/football/referees";
+    fetch_and_insert_all::<models::Referees>(conn, &token, &url).await?;
 
     Ok(())
 }

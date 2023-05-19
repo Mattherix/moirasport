@@ -5,6 +5,7 @@ mod leagues;
 mod seasons;
 mod stages;
 mod rounds;
+mod referees;
 
 pub use teams::{Teams, TeamsType};
 pub use coaches::{Coachs, TeamOfTheCoach};
@@ -13,3 +14,4 @@ pub use leagues::Leagues;
 pub use seasons::{Seasons, TieBreakerRule};
 pub use stages::{Stage, StageType};
 pub use rounds::Rounds;
+pub use referees::Referees;
