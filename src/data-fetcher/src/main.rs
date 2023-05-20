@@ -77,7 +77,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let url = "https://api.sportmonks.com/v3/football/referees";
     fetch_and_insert_all::<models::Referees>(conn, &token, &url).await?;
     */
-
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/fixtures?include=participants;scores;";
     fetch_and_insert_all::<models::Fixtures>(conn, &token, &url).await?;
