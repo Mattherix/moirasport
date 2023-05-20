@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Teams (
     short_code varchar(5),
     type set('domestic') NOT NULL,
     image_path varchar(255) NOT NULL,
-    founded year(4) NOT NULL,
+    founded int,
 
     PRIMARY KEY (id),
 
@@ -25,10 +25,10 @@ CREATE TABLE IF NOT EXISTS Coachs (
     firstname varchar(35) NOT NULL,
     lastname varchar(35) NOT NULL,
     image_path varchar(255) NOT NULL,
-    height int NOT NULL,
-    weight int NOT NULL,
-    date_of_birth date NOT NULL,
-    gender set('male', 'female') NOT NULL,
+    height int,
+    weight int,
+    date_of_birth date,
+    gender set('male', 'female', 'neutral') NOT NULL,
     team_id int NOT NULL,
 
     PRIMARY KEY (id),
@@ -40,22 +40,22 @@ CREATE TABLE IF NOT EXISTS Coachs (
 
 CREATE TABLE IF NOT EXISTS Players (
     id int NOT NULL,
-    role set('goalkeeper', 'defender', 'midfielder', 'attacker', 'unknown') NOT NULL, -- position field include
-    position set('centre-back', 'defensive-midfied', 'attacking-midfied',
+    role set('goalkeeper', 'defender', 'midfielder', 'attacker', 'coach', 'unknown') NOT NULL, -- position field include
+    position set('defender', 'goalkeeping-coach', 'coach', 'assistant-coach', 'secondary_striker', 'goalkeeper', 'centre-back', 'defensive-midfied', 'attacking-midfied',
                  'centre-forward', 'left-wing', 'central-midfied', 'right-back',
                  'left-back', 'right-wing', 'left-midfield', 'right-midfield') NOT NULL, -- detailed position include
     firstname varchar(35) NOT NULL,
     lastname varchar(35) NOT NULL,
     image_path varchar(255) NOT NULL,
-    height int NOT NULL,
-    weight int NOT NULL,
-    date_of_birth date NOT NULL,
-    gender set('male', 'female') NOT NULL,
+    height int,
+    weight int,
+    date_of_birth date,
+    gender set('male', 'female', 'neutral') NOT NULL,
 
     PRIMARY KEY (id),
 
-    CHECK (height > 100 AND height < 220),
-    CHECK (weight > 30 AND weight < 120)
+    CHECK (height < 220),
+    CHECK (weight < 120)
 );
 
 CREATE TABLE IF NOT EXISTS Leagues (
@@ -74,10 +74,10 @@ CREATE TABLE IF NOT EXISTS Seasons (
     state set('pending', 'current', 'finished') NOT NULL,
     starting_at date NOT NULL,
     ending_at date NOT NULL,
-    tie_breaker_rule set('points', 'head-to-head', 'goal-difference',
-        'goal-difference-goals-scored', 'head-to-head-ranking-prev-stage',
-        'none') NOT NULL,
-    league_id int NOT NULL,
+    tie_breaker_rule set("points", "head-to-head", "goal-difference",
+        "goal-difference-goals-scored", "head-to-head-ranking-prev-stage",
+        "none"),
+    league_id int,
 
     PRIMARY KEY (id),
     FOREIGN KEY (league_id) REFERENCES Leagues(id),
@@ -88,11 +88,11 @@ CREATE TABLE IF NOT EXISTS Seasons (
 CREATE TABLE IF NOT EXISTS Stages (
     id int NOT NULL,
     name varchar(35) NOT NULL,
-    type set('group-stage', 'knock-out', 'qualifying') NOT NULL,
-    sort_order int NOT NULL,
-    state set('pending', 'current', 'finished') NOT NULL,
-    starting_at date NOT NULL,
-    ending_at date NOT NULL,
+    type set('group-stage', 'knock-out', 'qualifying'),
+    sort_order int,
+    state set('current', 'finished') NOT NULL,
+    starting_at date,
+    ending_at date,
     season_id int NOT NULL,
 
     PRIMARY KEY (id),
@@ -104,9 +104,9 @@ CREATE TABLE IF NOT EXISTS Stages (
 CREATE TABLE IF NOT EXISTS Rounds (
     id int NOT NULL,
     name varchar(35) NOT NULL,
-    state set('pending', 'current', 'finished') NOT NULL,
-    starting_at date NOT NULL,
-    ending_at date NOT NULL,
+    state set('current', 'finished') NOT NULL,
+    starting_at date,
+    ending_at date,
     stage_id int NOT NULL,
 
     PRIMARY KEY (id),
@@ -117,13 +117,12 @@ CREATE TABLE IF NOT EXISTS Rounds (
 
 CREATE TABLE IF NOT EXISTS Referees (
     id int NOT NULL,
-    firstname varchar(35) NOT NULL,
-    lastname varchar(35) NOT NULL,
-    image_path varchar(255) NOT NULL,
-    height int NOT NULL,
-    weight int NOT NULL,
-    date_of_birth date NOT NULL,
-    gender set('male', 'female') NOT NULL,
+    name varchar(100) NOT NULL,
+    image_path varchar(255),
+    height int,
+    weight int,
+    date_of_birth date,
+    gender set('male', 'female', 'neutral'),
 
     PRIMARY KEY (id),
 
@@ -136,10 +135,10 @@ CREATE TABLE IF NOT EXISTS Fixtures (
     name varchar(50),
     starting_at date,
     length int, 
-    home_score int NOT NULL,
-    away_score int NOT NULL,
-    home_team_id int NOT NULL,
-    away_team_id int NOT NULL,
+    home_score int,
+    away_score int,
+    home_team_id int,
+    away_team_id int,
     stage_id int NOT NULL,
     round_id int,
 
@@ -151,6 +150,7 @@ CREATE TABLE IF NOT EXISTS Fixtures (
     -- events included is always empty
 ); 
 
+-- Won't implement, don't know how
 CREATE TABLE IF NOT EXISTS arbitrate (
     fixture_id int NOT NULL,
     referee_id int NOT NULL,
