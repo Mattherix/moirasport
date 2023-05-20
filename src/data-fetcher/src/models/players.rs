@@ -23,40 +23,57 @@ pub enum PlayerRole {
 #[sqlx(type_name = "player_position")]
 #[sqlx(rename_all = "lowercase")]
 pub enum PlayerPosition {
+    #[serde(rename = "goalkeeper")]
     #[sqlx(rename = "goalkeeper")]
     Goalkeeper,
+    #[serde(rename = "centre-back")]
     #[sqlx(rename = "centre-back")]
     CentreBack,
+    #[serde(rename = "defensive-midfied")]
     #[sqlx(rename = "defensive-midfied")]
     DefensiveMidfied,
+    #[serde(rename = "attacking-midfied")]
     #[sqlx(rename = "attacking-midfied")]
     AttackingMidfied,
+    #[serde(rename = "centre-forward")]
     #[sqlx(rename = "centre-forward")]
     CentreForward,
+    #[serde(rename = "left-wing")]
     #[sqlx(rename = "left-wing")]
     LeftWing,
+    #[serde(rename = "central-midfied")]
     #[sqlx(rename = "central-midfied")]
     CentralMidfied,
+    #[serde(rename = "right-back")]
     #[sqlx(rename = "right-back")]
     RightBack,
+    #[serde(rename = "left-back")]
     #[sqlx(rename = "left-back")]
     LeftBack,
+    #[serde(rename = "right-wing")]
     #[sqlx(rename = "right-wing")]
     RightWing,
+    #[serde(rename = "left-midfield")]
     #[sqlx(rename = "left-midfield")]
     LeftMidfield,
+    #[serde(rename = "right-midfield")]
     #[sqlx(rename = "right-midfield")]
     RightMidfield,
+    #[serde(rename = "coach")]
     #[sqlx(rename = "coach")]
     Coach,
+    #[serde(rename = "assistant-coach")]
     #[sqlx(rename = "assistant-coach")]
     AssistantCoach,
+    #[serde(rename = "secondary_striker")]
     #[sqlx(rename = "secondary_striker")]
     SecondaryStriker,
+    #[serde(rename = "goalkeeping-coach")]
     #[sqlx(rename = "goalkeeping-coach")]
     GoalkeepingCoach,
+    #[serde(rename = "defender")]
     #[sqlx(rename = "defender")]
-    Defender,
+    Defender
 }
 #[derive(Deserialize, Debug)]
 pub struct PlayerRoleResponse {
