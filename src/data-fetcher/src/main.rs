@@ -44,18 +44,18 @@ async fn main() -> Result<(), Box<dyn Error>> {
         get_env("MYSQL_DATABASE")
     ))
     .await?;
-    /*
+
     let conn = &mut pool.acquire().await?;
-    let url = "https://api.sportmonks.com/v3/football/teams";
+    let url = "https://api.sportmonks.com/v3/football/players?include=position;detailedPosition";
+    fetch_and_insert_all::<models::Players>(conn, &token, &url).await?;
+
+    let conn = &mut pool.acquire().await?;
+    let url = "https://api.sportmonks.com/v3/football/teams?include=players;";
     fetch_and_insert_all::<models::Teams>(conn, &token, &url).await?;
 
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/coaches?include=teams";
     fetch_and_insert_all::<models::Coachs>(conn, &token, &url).await?;
-
-    let conn = &mut pool.acquire().await?;
-    let url = "https://api.sportmonks.com/v3/football/players?include=position;detailedPosition";
-    fetch_and_insert_all::<models::Players>(conn, &token, &url).await?;
 
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/leagues";
@@ -76,7 +76,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/referees";
     fetch_and_insert_all::<models::Referees>(conn, &token, &url).await?;
-    */
+
     let conn = &mut pool.acquire().await?;
     let url = "https://api.sportmonks.com/v3/football/fixtures?include=participants;scores;";
     fetch_and_insert_all::<models::Fixtures>(conn, &token, &url).await?;
