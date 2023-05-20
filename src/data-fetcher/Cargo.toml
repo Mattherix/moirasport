@@ -1,0 +1,28 @@
+[package]
+name = "data-fetcher"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0"
+description = "Download data from sportmonks api and pu it in the database"
+homepage = "https://github.com/Mattherix/moirasport"
+repository = "https://github.com/Mattherix/moirasport"
+readme = "README.md"
+exclude = [
+    ".github/*",
+    ".env.sample",
+    ".env",
+    ".gitignore"
+]
+
+[dependencies]
+serde_json = "1.0"
+log = "0.4.17"
+serde = { version = "1.0", features = ["derive"] }
+reqwest = { version = "0.11", features = ["blocking", "json"]}
+url = { version = "2.3.1", features = ["serde"] }
+dotenvy = "0.15.7"
+sqlx = { version = "0.6.3", features = ["mysql", "runtime-tokio-native-tls", "chrono"] }
+chrono = { version = "0.4.24", features = ["serde"] }
+tokio = { version = "1.28.1", features = ["macros", "rt-multi-thread", "full"] }
+async-recursion = "1.0.4"
+async-trait = "0.1.68"
